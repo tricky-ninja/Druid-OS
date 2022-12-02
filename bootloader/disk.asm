@@ -9,34 +9,45 @@ read_kernel:
 
   mov ah, 02h 
   mov al, dh ; sectors to read
-  mov cl, 02h ; the sector to read 1 is our bootloader
 
- mov ch, 0
- mov dh, 0
- mov dl, [boot_drive]
+  xor ch,ch ; sets the cylinder to 3
+  xor dh, dh  ; sets the head number to 3
 
+  mov cl, 02h ; the sector number to read, 1st is our bootloader
+  mov dl, [boot_drive]
 
+  mov di, 5
+
+.loop:
+  test di, di   ; set zf to 1 if di is 0
+  jz .read_err
+  stc     ; some bioses won't set the carry flag
   int 13h
-  jc read_err ; if carry flag is set then there is an error
+  dec di
+  jc .loop ; if carry flag is set then there is an error, so we try again
 
   pop dx
+  push ax
+  mov al, 2
   cmp al, dh  ; sector read count
-  jne sector_err
+  pop ax
+  jne .sector_err
 
   popa
   ret
 
-read_err:
+.read_err:
   mov si, read_err_msg
   call print
   mov dh, ah
   jmp halt
 
-sector_err:
+.sector_err:
   mov si, sector_err_msg
   call print
-  jmp halt
+  jmp .loop
+  ret
 
 
 read_err_msg: db "Reading from disk failed!", ENDL
-sector_err_msg: db "Incorrect number of sectors to read!", ENDL
+sector_err_msg: db "Incorrect number of sectors to read! Trying again...", ENDL
