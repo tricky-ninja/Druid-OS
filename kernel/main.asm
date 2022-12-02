@@ -6,7 +6,7 @@ start: jmp main
 
 main:
 
-  mov ah, 9
+  mov ah, 0Eh
   xor bh, bh
   mov cx, 1
   mov al, 'E'
@@ -15,4 +15,3 @@ main:
 
   cli 
   hlt
-

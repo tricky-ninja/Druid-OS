@@ -28,5 +28,8 @@ clean:
 run: $(BUILD_DIR)/disk.img
 	qemu-system-i386 -machine q35 -drive file=$<,format=raw
 
+run_floppy: $(BUILD_DIR)/disk.img
+	qemu-system-i386 -machine q35 -fda $<
+
 debug: bochs_config $(BUILD_DIR)/disk.img
 	bochs -f $<
