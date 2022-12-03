@@ -5,15 +5,31 @@
 
 start: jmp boot
 
-%include "bootloader/out.asm"
-%include "bootloader/disk.asm"
+KERNEL_OFFSET equ 0x7f00
+
+%include "bios_functions/out.asm"
+%include "bios_functions/disk.asm"
+%include "bootloader/gdt.asm"
+%include "bootloader/switch-to-32-bit.asm"
+
+[bits 16]
+load_kernel:
+  mov dl, [BOOT_DRIVE]
+  mov bx, KERNEL_OFFSET   ; store to es:bx(0x0:0x7f00)
+  mov dh, 5   ; read 5 segments
+
+  ; loads and jumps to the kernel
+  call read_kernel
+  ret
+
 
 halt:
   hlt
   jmp halt
 
+
 boot:
-  mov [boot_drive], dl
+  mov [BOOT_DRIVE], dl
   xor ax, ax ;  sets ax to 0
 
   ; sets data segments to 0
@@ -22,24 +38,27 @@ boot:
 
   ; sets up stack
   mov ss, ax
-  mov sp, 0x7c00
-  mov bp, sp
+  mov bp, 0x7c00
+  mov sp, bp
 
 
   mov si, wlcm_msg
   call print
 
-  mov dh, 30
-  mov bx, kernel
-  call read_kernel
-  jmp kernel
+  call load_kernel
+  call switch_to_32_bit
 
   jmp halt
 
 
-wlcm_msg: db "Welcome to winterburn v0.1.22.11", ENDL
-boot_drive: db 0
+[bits 32]
+START_KENREL:
+  call KERNEL_OFFSET
+  jmp halt
+
+
+wlcm_msg: db "Winterburn v0.1.22.11", ENDL
+BOOT_DRIVE: db 0
 
 times 510-($-$$) db 0
 dw 0xaa55
-kernel: db 0

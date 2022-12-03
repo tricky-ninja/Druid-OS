@@ -1,6 +1,7 @@
 ;
 ; @params:
-;   dx(dl) - number of sectors to load
+;   dh - number of sectors to load
+;   dl - drive number
 ;   bx - loaction in ram to store the read data
 ;
 read_kernel:
@@ -14,7 +15,6 @@ read_kernel:
   xor dh, dh  ; sets the head number to 3
 
   mov cl, 02h ; the sector number to read, 1st is our bootloader
-  mov dl, [boot_drive]
 
   mov di, 5
 
@@ -27,10 +27,7 @@ read_kernel:
   jc .loop ; if carry flag is set then there is an error, so we try again
 
   pop dx
-  push ax
-  mov al, 2
   cmp al, dh  ; sector read count
-  pop ax
   jne .sector_err
 
   popa
