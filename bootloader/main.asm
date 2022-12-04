@@ -30,14 +30,7 @@ halt:
 
 boot:
   mov [BOOT_DRIVE], dl
-  xor ax, ax ;  sets ax to 0
-
-  ; sets data segments to 0
-  mov ds, ax
-  mov es, ax
-
-  ; sets up stack
-  mov ss, ax
+  
   mov bp, 0x7c00
   mov sp, bp
 

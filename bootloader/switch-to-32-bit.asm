@@ -11,6 +11,14 @@ switch_to_32_bit:
 [bits 32]
 start_32bit:
 
+  ; sets up data and stack segments
+  mov ax, DATA_SEG
+  mov es, ax
+  mov ds, ax
+  mov gs, ax
+  mov fs, ax
+  mov ss, ax
+
   ; set up stack
   mov ebp, 0x90000
   mov esp, ebp
