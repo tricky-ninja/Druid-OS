@@ -12,7 +12,6 @@ KERNEL_OFFSET equ 0x7f00
 %include "bootloader/gdt.asm"
 %include "bootloader/switch-to-32-bit.asm"
 
-[bits 16]
 load_kernel:
   mov dl, [BOOT_DRIVE]
   mov bx, KERNEL_OFFSET   ; store to es:bx(0x0:0x7f00)
