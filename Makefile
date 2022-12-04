@@ -5,8 +5,8 @@ LNK = i686-elf-ld
 CFLAGS = -ffreestanding
 
 
-BOOT_SRC = bootloader/main.asm
-KENREL_SRC = kernel/main.c
+BOOT_SRC = src/boot/main.asm
+KENREL_SRC = src/kernel/main.c
 BUILD_DIR = build
 
 .PHONY: all clean create run debug
@@ -16,7 +16,7 @@ all: $(BUILD_DIR)/disk.img
 $(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel-entry.o $(BUILD_DIR)/kernel.o
 	$(LNK) -o $@ -Ttext 0x7f00 $^ --oformat binary
 
-$(BUILD_DIR)/kernel-entry.o: kernel/kernel-entry.asm create
+$(BUILD_DIR)/kernel-entry.o: src/kernel/kernel-entry.asm create
 	$(ASM) $< -f elf -o $@
 
 $(BUILD_DIR)/kernel.o: $(KENREL_SRC) create

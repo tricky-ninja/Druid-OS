@@ -7,10 +7,10 @@ start: jmp boot
 
 KERNEL_OFFSET equ 0x7f00
 
-%include "bios_functions/out.asm"
-%include "bios_functions/disk.asm"
-%include "bootloader/gdt.asm"
-%include "bootloader/switch-to-32-bit.asm"
+%include "src/boot/bios_functions/out.asm"
+%include "src/boot/bios_functions/disk.asm"
+%include "src/boot/gdt.asm"
+%include "src/boot/switch-to-32-bit.asm"
 
 load_kernel:
   mov dl, [BOOT_DRIVE]
