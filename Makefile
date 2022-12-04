@@ -1,6 +1,9 @@
 ASM = nasm
-CC = gcc
-LNK = ld
+C = i686-elf-gcc
+LNK = i686-elf-ld
+
+CFLAGS = -ffreestanding
+
 
 BOOT_SRC = bootloader/main.asm
 KENREL_SRC = kernel/main.c
@@ -11,13 +14,13 @@ BUILD_DIR = build
 all: $(BUILD_DIR)/disk.img
 
 $(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel-entry.o $(BUILD_DIR)/kernel.o
-	$(LNK) -m elf_i386 -o $@ -Ttext 0x7f00 $^ --oformat binary
+	$(LNK) -o $@ -Ttext 0x7f00 $^ --oformat binary
 
 $(BUILD_DIR)/kernel-entry.o: kernel/kernel-entry.asm create
 	$(ASM) $< -f elf -o $@
 
 $(BUILD_DIR)/kernel.o: $(KENREL_SRC) create
-	$(CC) -fno-pie -m32 -ffreestanding -c $< -o $@
+	$(C) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/disk.img: $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin
 	dd if=/dev/zero of=$@ bs=512 count=2880

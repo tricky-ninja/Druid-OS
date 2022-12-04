@@ -1,4 +1,7 @@
-romimage: file="/usr/share/seabios/bios.bin"
+megs: 128
+romimage: file=/usr/share/bochs/BIOS-bochs-legacy
+vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
 floppya: 1_44=build/disk.img, status=inserted
 boot: floppy
-display_library: sdl2, options="gui_debug"  
+mouse: enabled=0
+display_library: x, options="gui_debug"

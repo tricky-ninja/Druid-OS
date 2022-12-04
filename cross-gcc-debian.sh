@@ -47,4 +47,4 @@ echo "------------------------Installing gcc------------------------"
 make install-gcc -j $cpu_cores
 make install-target-libgcc -j 2
 
-echo "Done setting up 32 bit gcc try runniint it with $(TARGET)-gcc"
+echo "Done setting up 32 bit cross gcc\n Try runing it with $(TARGET)-gcc"
