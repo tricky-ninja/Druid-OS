@@ -1,4 +1,4 @@
-void main() {
+void _start() {
     char* video_memory = (char*) 0xb8000;
     *video_memory = 'L';
     *(video_memory + 2) = 'O';

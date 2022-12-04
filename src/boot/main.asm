@@ -49,7 +49,7 @@ START_KENREL:
   jmp halt
 
 
-wlcm_msg: db "Winterburn v0.1.22.11", ENDL
+wlcm_msg: db "Druid v0.2.22.12", ENDL
 BOOT_DRIVE: db 0
 
 times 510-($-$$) db 0
