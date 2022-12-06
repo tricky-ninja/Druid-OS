@@ -1,10 +1,15 @@
+#include "system.h"
+#include "../drivers/screen.h"
+
+void _test()
+{
+    VGA_init();
+    SCREEN_clear(0xbc);
+    SCREEN_print_string("Wow that was really cool", 0xb2);
+    SCREEN_print_string_at("Druid works!!!", 1040, 0, 0xbc);
+}
+
 void _start() {
-    char* video_memory = (char*) 0xb8000;
-    *video_memory = 'L';
-    *(video_memory + 2) = 'O';
-    *(video_memory + 4) = 'L';
-    *(video_memory + 6) = ' ';
-    *(video_memory + 8) = 'O';
-    *(video_memory + 10) = 'S';
-    *(video_memory + 12) = ' ';
+    _test();
+    for (;;);
 }
