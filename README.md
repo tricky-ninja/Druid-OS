@@ -40,8 +40,9 @@ make debug
 ### Current
 - Simple bootloader, loads the kernel in memory and jumps to it
 - Flat memory model (just the strictly necessary segmentation (data/code))
-### In development
 - VGA driver
+### In development
+- Basic standard library
 - Keyboard driver
 - Filesystem
 
