@@ -18,30 +18,24 @@ uint32_t VGA_get_cursor()
   return offset * 2;
 }
 
-void SCREEN_clear(uint8_t color)
+void VGA_clear(uint8_t color)
 {
   if (!color)
     color = VGA_DEFAULT_COLOR;
-  uint16_t empty = (color << 8);
+  uint16_t empty = 0x20 | (color << 8);
 
   memsetw((uint16_t *)VGA_VIDEO_MEMORY, empty, 80 * 25);
 }
 
-void SCREEN_print_char_at(char character, int col, int row, uint8_t attribute)
+void VGA_print_char_at(char character, int col, int row, uint8_t attribute)
 {
 
-  // If attribute is 0
-  if (!attribute)
-  {
-    attribute = VGA_DEFAULT_COLOR;
-  }
-
-  uint32_t offset = (row * SCREEN_MAX_COLS) + col;
-  VGA_set_cursor(offset);
-  SCREEN_print_char(character, attribute);
+  uint32_t offset = csr_to_offset(col, row);
+  VGA_set_cursor(offset*2);
+  VGA_print_char(character, attribute);
 }
 
-void SCREEN_print_char(char character, uint8_t attribute)
+void VGA_print_char(char character, uint8_t attribute)
 {
   if (!attribute)
   {
@@ -49,34 +43,56 @@ void SCREEN_print_char(char character, uint8_t attribute)
   }
 
   uint32_t offset = VGA_get_cursor();
-  if (offset > 2080) // Greater than VGA memory
-  {
-    VGA_set_cursor(0);
+  if (offset >= SCREEN_MAX_ROWS * SCREEN_MAX_COLS * 2) {
+     offset = VGA_scroll(1);
   }
-  memset((char *)(VGA_VIDEO_MEMORY + offset), character, 1);
-  memset((char *)(VGA_VIDEO_MEMORY + offset + 1), attribute, 1);
-  VGA_set_cursor(offset + 2);
+
+
+  /* Any character greater than or equal to space is printable */
+  if (character >= ' ')
+  {
+     memset((char *)(VGA_VIDEO_MEMORY + offset), character, 1);
+     memset((char *)(VGA_VIDEO_MEMORY + offset + 1), attribute, 1);
+     offset=offset+2;
+  }
+  VGA_set_cursor(offset);
+  
 }
 
-void SCREEN_print_string(char *string, uint8_t attribute)
+void VGA_print_string(char *string, uint8_t attribute)
 {
-  for (uint32_t i = 0; string[i] != '\0'; i++)
+  for (uint32_t i = 0; i < strlen(string); i++)
   {
-    SCREEN_print_char(string[i], attribute);
+    VGA_print_char(string[i], attribute);
   }
 }
 
-void SCREEN_print_string_at(char *string, int col, int row, uint8_t attribute)
+void VGA_print_string_at(char *string, int col, int row, uint8_t attribute)
 {
   uint32_t offset = (row * SCREEN_MAX_COLS) + col;
-  VGA_set_cursor(offset);
-  for (uint32_t i = 0; string[i] != '\0'; i++)
-  {
-    SCREEN_print_char(string[i], attribute);
-  }
+  VGA_set_cursor(offset*2);
+  VGA_print_string(string, attribute);
+}
+
+uint32_t VGA_scroll(uint8_t amt)
+{
+  uint16_t blank = 0x20 | (VGA_DEFAULT_COLOR << 8);
+  uint32_t offset = (amt*SCREEN_MAX_COLS)*2;
+  uint32_t count = (SCREEN_MAX_ROWS - amt) * 80;
+  memcpy((uint8_t*) VGA_VIDEO_MEMORY, (uint8_t*)(VGA_VIDEO_MEMORY+offset), count*2);
+  VGA_set_cursor(VGA_get_cursor() - offset);
+  memsetw((uint16_t*)(VGA_VIDEO_MEMORY+count*2), blank, amt*80);
+  return VGA_get_cursor();
 }
 
 void VGA_init()
 {
   VGA_set_cursor(0);
+}
+
+
+// Helper functions
+uint32_t csr_to_offset(uint8_t col, uint8_t row)
+{
+  return 2 * (row * SCREEN_MAX_COLS + col);
 }

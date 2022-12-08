@@ -15,7 +15,7 @@ KERNEL_OFFSET equ 0x7f00
 load_kernel:
   mov dl, [BOOT_DRIVE]
   mov bx, KERNEL_OFFSET   ; store to es:bx(0x0:0x7f00)
-  mov dh, 5   ; read 5 segments
+  mov dh, 30   ; read 30 segments(15.36 KB) just to be safe when our kerne; grows
 
   ; loads and jumps to the kernel
   call read_kernel
