@@ -13,12 +13,16 @@ void _kernel_panic(char *err)
 void _test()
 {
     VGA_init();
-    VGA_clear(0);
-    VGA_print_string("Druid os, VGA test", 0);
+    for (uint8_t i=0; i<26; i++)
+    {
+        VGA_print_char('\n', 0);
+        VGA_print_char('a'+i, 0);
+    }
+
 }
 
 void _start() {
     _test();
-    //_kernel_panic("Error description here");  // uncomment to test kernel panic screen
+    // _kernel_panic("Error description here");  // uncomment to test kernel panic screen
     for (;;);
 }

@@ -1,13 +1,17 @@
-ASM = nasm
-C = i686-elf-gcc
-LNK = i686-elf-ld
-
-CFLAGS = -ffreestanding
-
 BOOT_DIR = src/boot
 KENREL_DIR = src/kernel
 DRIVER_DIR = src/drivers
 BUILD_DIR = build
+
+ASM = nasm
+CC = i686-elf-gcc
+LD = i686-elf-gcc
+
+CFLAGS = -ffreestanding -nostdlib
+LDFLAGS = -T $(KENREL_DIR)/link.ld -nostdlib
+
+LIBS += -lgcc
+
 
 # Automatically expand to a list of existing files that
 # match the patterns
@@ -21,14 +25,14 @@ OBJ_FILES=$(patsubst src/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES))
 all: $(BUILD_DIR)/disk.img
 
 $(BUILD_DIR)/kernel.bin: $(BUILD_DIR)/kernel-entry.o ${OBJ_FILES}
-	$(LNK) -o $@ -Ttext 0x7f00 $^ --oformat binary
+	$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(BUILD_DIR)/kernel-entry.o: $(KENREL_DIR)/kernel-entry.asm create
 	$(ASM) $< -f elf -o $@
 
 # Generic rule for building ’somefile .o’ from ’somefile .c’
 $(BUILD_DIR)/%.o: src/%.c
-	$(C) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/disk.img: $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin
 	dd if=/dev/zero of=$@ bs=512 count=2880
@@ -48,7 +52,7 @@ clean:
 	rm -rf $(BUILD_DIR)/*
 
 run: $(BUILD_DIR)/disk.img
-	qemu-system-i386 -machine q35 -drive file=$<,format=raw
+	qemu-system-i386 -debugcon stdio -machine q35 -drive file=$<,format=raw
 
 run_floppy: $(BUILD_DIR)/disk.img
 	qemu-system-i386 -machine q35 -fda $<
