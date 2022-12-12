@@ -33,9 +33,9 @@ uint32_t VGA_get_cursor_offset()
 void VGA_clear(uint8_t color)
 {
   if (!color)
-    color = currentContext.defaultColor;
+    color = currentContext.color;
 
-  currentContext.defaultColor = color;
+  currentContext.color = color;
 
   uint16_t blank = 0x20 | (color << 8);
 
@@ -53,13 +53,29 @@ void VGA_print_char(char character, uint8_t attribute)
 {
   if (!attribute)
   {
-    attribute = currentContext.defaultColor;
+    attribute = currentContext.color;
   }
 
   if (character == '\n')
   {
     currentContext.csrX = 0;
     currentContext.csrY++;
+  }
+
+  else if (character == '\r')
+  {
+    currentContext.csrX = 0;
+  }
+  else if (character == '\t')
+  {
+    currentContext.csrX = (currentContext.csrX + 8) & ~(8 - 1);
+  }
+  else if (character == '\b')
+  {
+   if (currentContext.csrX != 0) currentContext.csrX--;
+   uint32_t offset = csr_to_offset(currentContext.csrX, currentContext.csrY);
+   memset(currentContext.videoAddress + offset, ' ', 1);
+   memset(currentContext.videoAddress + offset + 1, attribute, 1);
   }
 
   /* Any character greater than or equal to space is printable */
@@ -73,23 +89,9 @@ void VGA_print_char(char character, uint8_t attribute)
   VGA_set_cursor(currentContext.csrX, currentContext.csrY);
 }
 
-void VGA_print_string(char *string, uint8_t attribute)
-{
-  for (uint32_t i = 0; i < strlen(string); i++)
-  {
-    VGA_print_char(string[i], attribute);
-  }
-}
-
-void VGA_print_string_at(char *string, int col, int row, uint8_t attribute)
-{
-  VGA_set_cursor(col, row);
-  VGA_print_string(string, attribute);
-}
-
 uint32_t VGA_scroll(uint8_t amt)
 {
-  uint16_t blank = 0x20 | (currentContext.defaultColor << 8);
+  uint16_t blank = 0x20 | (currentContext.color << 8);
   uint32_t offset = (amt * currentContext.maxCols) * 2; // the memory offset where x=0, y=amt
   uint32_t count = (currentContext.maxRows - amt) * 80; // number of words(2 bytes) till x=79, y=0 from x=0, y=amt
   memcpy(currentContext.videoAddress, currentContext.videoAddress + offset, count * 2);
@@ -100,6 +102,7 @@ uint32_t VGA_scroll(uint8_t amt)
 
 void VGA_init()
 {
+  currentContext.color = VGA_DEFAULT_COLOR;
   VGA_set_cursor(0, 0);
   VGA_clear(0);
 }
