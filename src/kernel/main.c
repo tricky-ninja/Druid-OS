@@ -13,11 +13,11 @@ void _kernel_panic(char *err)
 void _test()
 {
     VGA_init();
-    puts("IF this works then yaya\t wohoo\nblu\rbro\bu");
+    printf("%s at your service in %d seconds", "Druid OS", 69);
 }
 
 void _start() {
     _test();
-    _kernel_panic("Error description here");  // uncomment to test kernel panic screen
+    //_kernel_panic("Error description here");  // uncomment to test kernel panic screen
     for (;;);
 }
