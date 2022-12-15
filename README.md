@@ -39,7 +39,7 @@ make debug
 ## Features
 ### Current
 - Simple bootloader, loads the kernel in memory and jumps to it
-- Flat memory model (just the strictly necessary segmentation (data/code))
+- Flat memory model
 - VGA driver
 ### In development
 - Basic standard library

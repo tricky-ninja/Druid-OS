@@ -1,37 +1,5 @@
 #include "stdio.h"
 
-void reverse(char *string)
-{
-
-  static int i, l, temptemporary_var;
-  l = strlen(string);
-  if (i < l / 2)
-  {
-    temptemporary_var = string[i];
-    string[i] = string[l - i - 1];
-    string[l - i - 1] = temptemporary_var;
-    i++;
-    reverse(string);
-  }
-}
-
-char *numToString(uint32_t num)
-{
-  char *buffer;
-  uint32_t temp = num;
-  int i = 0;
-  while (temp > 0)
-  {
-    buffer[i] = '0'+(temp%10);
-    temp = temp/10;
-    i++;
-  }
-
-  buffer[i] = '\0';
-  reverse(buffer);
-  return buffer;
-};
-
 int putc(char ch)
 {
   VGA_print_char(ch, 0);
@@ -42,7 +10,7 @@ int puts(char *string)
 {
   for (uint32_t i = 0; i < strlen(string); i++)
   {
-    VGA_print_char(string[i],0);
+    VGA_print_char(string[i], 0);
   }
   return strlen(string);
 }
@@ -58,29 +26,44 @@ void printf(char *format, ...)
     switch (state)
     {
     case NORMAL_STATE:
-      if (*fmt == '%') state = SPECIFIER_STATE;
-      else putc(*fmt);
+      if (*fmt == '%')
+        state = SPECIFIER_STATE;
+      else
+        putc(*fmt);
       break;
-    
+
     case SPECIFIER_STATE:
       switch (*fmt)
       {
+      case 'i':
       case 'd':
+      {
+        int value = va_arg(args, int);
+        puts(itoa(value));
+      }
+      break;
+
+      case 'u':
         {
-          int value = va_arg(args, int);
-          puts(numToString(value));
+          uint32_t value = va_arg(args, int);
+          puts(utoa(value));
         }
         break;
+
       case 's':
-       { char *value = va_arg(args, char*);
-        puts(value);}
-        break;
-      
+      {
+        char *value = va_arg(args, char *);
+        puts(value);
+      }
+      break;
+
       case 'c':
-        {char value = va_arg(args, char);
-        putc(value);}
-        break;
-      
+      {
+        char value = (char)va_arg(args, int);
+        putc(value);
+      }
+      break;
+
       default:
         break;
       }
@@ -90,8 +73,6 @@ void printf(char *format, ...)
     default:
       break;
     }
-  
     fmt++;
   }
-
 }

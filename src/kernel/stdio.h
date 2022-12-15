@@ -2,6 +2,7 @@
 
 #include "../drivers/screen.h"
 #include <stdarg.h>
+#include "stdlib.h"
 
 enum
 {
@@ -13,4 +14,3 @@ int putc(char ch);
 int puts(char *string);
 
 void printf(char *format, ...);
-char *numToString(uint32_t num);

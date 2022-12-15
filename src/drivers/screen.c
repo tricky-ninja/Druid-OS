@@ -104,7 +104,7 @@ void VGA_init()
 {
   currentContext.color = VGA_DEFAULT_COLOR;
   VGA_set_cursor(0, 0);
-  VGA_clear(0);
+  VGA_clear(VGA_DEFAULT_COLOR);
 }
 
 // Helper functions
