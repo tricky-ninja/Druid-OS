@@ -22,7 +22,7 @@ typedef struct
 
 } VGA_Context;
 
-static VGA_Context currentContext = {
+static VGA_Context g_currentContext = {
     (uint8_t *)0xB8000,
     25,
     80,

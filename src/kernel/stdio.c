@@ -1,21 +1,22 @@
 #include "stdio.h"
 
-int putc(char ch)
+int putc_internal(bool debug,char ch)
 {
-  VGA_print_char(ch, 0);
+  if (debug)  x86_write_port_byte(0xE9, ch);
+  else VGA_print_char(ch, 0);
   return ch;
 }
 
-int puts(char *string)
+int puts_internal(bool debug, char *string)
 {
   for (uint32_t i = 0; i < strlen(string); i++)
   {
-    VGA_print_char(string[i], 0);
+    putc_internal(debug, string[i]);
   }
   return strlen(string);
 }
 
-void printf(char *format, ...)
+void printf_internal(bool debug, char *format, ...)
 {
   char *fmt = format;
   int state = NORMAL_STATE;
@@ -29,7 +30,7 @@ void printf(char *format, ...)
       if (*fmt == '%')
         state = SPECIFIER_STATE;
       else
-        putc(*fmt);
+        putc_internal(debug, *fmt);
       break;
 
     case SPECIFIER_STATE:
@@ -39,28 +40,28 @@ void printf(char *format, ...)
       case 'd':
       {
         int value = va_arg(args, int);
-        puts(itoa(value));
+        puts_internal(debug, itoa(value));
       }
       break;
 
       case 'u':
         {
           uint32_t value = va_arg(args, int);
-          puts(utoa(value));
+          puts_internal(debug,utoa(value));
         }
         break;
 
       case 's':
       {
         char *value = va_arg(args, char *);
-        puts(value);
+        puts_internal(debug, value);
       }
       break;
 
       case 'c':
       {
         char value = (char)va_arg(args, int);
-        putc(value);
+        putc_internal(debug, value);
       }
       break;
 
@@ -75,4 +76,5 @@ void printf(char *format, ...)
     }
     fmt++;
   }
+  va_end(args);
 }
