@@ -41,6 +41,7 @@ make debug
 - Simple bootloader, loads the kernel in memory and jumps to it
 - Flat memory model
 - VGA driver
+- Basic Logging system (E9 hack)
 ### In development
 - Basic standard library
 - Keyboard driver
