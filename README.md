@@ -23,7 +23,7 @@ paru -S gcc make bison flex libgmp-static libmpc mpfr texinfo nasm mtools qemu-s
 ```
 **NOTE:** to install all the required packages on Arch, you need an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers) (the one used here is paru).
 
-The above commands will set evrything needed to build this  project except a cross compiler, it is a lengthy process but all you need to do is edit `scripts/cross-gcc-debian.sh` to make it use pacman and change the package names as needed, [this page explains the process in detail](https://wiki.osdev.org/GCC_Cross-Compiler#Preparing_for_the_build).
+The above commands will set everything needed to build this  project except a cross compiler, it is a lengthy process but all you need to do is edit `scripts/cross-gcc-debian.sh` to make it use pacman and change the package names as needed, [this page explains the process in detail](https://wiki.osdev.org/GCC_Cross-Compiler#Preparing_for_the_build).
 ### Running/Debugging
 After all the necessary packages are installed you're ready to dive in, once you're in the project directory you can run the os with qemu emulator by running
 ```bash
