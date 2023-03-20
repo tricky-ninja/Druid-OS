@@ -37,6 +37,9 @@ boot:
   mov si, wlcm_msg
   call print
 
+  mov ah, 00h
+  int 16h
+
   call load_kernel
   call switch_to_32_bit
 
@@ -49,7 +52,7 @@ START_KENREL:
   jmp halt
 
 
-wlcm_msg: db "Druid v0.2.22.12", ENDL
+wlcm_msg: db "Druid v0.20.23.3. Press any key to boot", ENDL
 BOOT_DRIVE: db 0
 
 times 510-($-$$) db 0

@@ -1,7 +1,7 @@
 BOOT_DIR = src/boot
 KENREL_DIR = src/kernel
 DRIVER_DIR = src/drivers
-BUILD_DIR = build
+BUILD_DIR = bins
 
 ASM = nasm
 CC = i686-elf-gcc

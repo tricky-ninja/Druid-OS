@@ -18,12 +18,12 @@ void setLogLevel(LogLevel level)
 void logf(LogLevel level, char *module, char *string, ...)
 {
   va_list args;
-  va_start(args, string);
+  va_start(args, module);
   if (level < g_currentLevel)
     return;
   dbg_puts(g_debug_colorCodes[level]);
-  dbg_printf("[%s] ", module);
+  printf_internal(true, "[%s] ", module);
   dbg_printf(string, args);
-  dbg_puts("\033[0m\n");
   va_end(args);
+  dbg_puts("\033[0m\n");
 }

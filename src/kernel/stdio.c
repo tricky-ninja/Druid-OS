@@ -18,10 +18,16 @@ int puts_internal(bool debug, char *string)
 
 void printf_internal(bool debug, char *format, ...)
 {
-  char *fmt = format;
-  int state = NORMAL_STATE;
   va_list args;
   va_start(args, format);
+  printf_helper(debug, format, args);
+  va_end(args);
+}
+
+void printf_helper(bool debug, char *format, va_list args)
+{
+  char *fmt = format;
+  int state = NORMAL_STATE;
   while (*fmt != '\0')
   {
     switch (state)
@@ -45,11 +51,11 @@ void printf_internal(bool debug, char *format, ...)
       break;
 
       case 'u':
-        {
-          uint32_t value = va_arg(args, int);
-          puts_internal(debug,utoa(value));
-        }
-        break;
+      {
+        uint32_t value = va_arg(args, int);
+        puts_internal(debug, utoa(value));
+      }
+      break;
 
       case 's':
       {
@@ -76,5 +82,4 @@ void printf_internal(bool debug, char *format, ...)
     }
     fmt++;
   }
-  va_end(args);
 }

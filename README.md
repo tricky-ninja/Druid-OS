@@ -1,7 +1,7 @@
 # Druid OS
 ## Overview
 Druid OS is a hobby operating system that we are working on in our free time.
-Our goal with Druid OS is to make it into a usable os with a functional shell, multi tasking user space programs and maybe a graphical shell...?(that maybe too far fetched)
+Our goal with Druid OS is to make it into a usable os with a functional shell, filesystem, dynamic memory management, ability to run other programs from the shell and a built in text editor, when that is all completed we have plans to add multi tasking user space programs and maybe a graphical shell(that maybe too far fetched)
 ## Building
 Clone this repo with
 ```bash
