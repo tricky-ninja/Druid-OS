@@ -1,14 +1,14 @@
 #pragma once
 
 #include <stdint.h>
-#include "../kernel/system.h"
+#include "../kernel/memory.h"
 
 #define VGA_CTRL_REGISTER 0x3d4
 #define VGA_DATA_REGISTER 0x3d5
 #define VGA_OFFSET_LOW 0x0f
 #define VGA_OFFSET_HIGH 0x0e
 #define VGA_DEFAULT_COLOR 0xf0
-
+#define VGA_BLANK (0x20 | (g_currentContext.color << 8))
 
 typedef struct
 {
@@ -62,7 +62,6 @@ void VGA_clear(uint8_t color);
 uint32_t VGA_scroll(uint8_t amt);
 
 void VGA_init();
-
 
 // Helper functions
 

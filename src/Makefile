@@ -1,4 +1,4 @@
-C_SOURCES=$(wildcard $(KENREL_DIR)/*.c $(DRIVER_DIR)/*.c)
+C_SOURCES := $(wildcard $(KERNEL_DIR)/*.c $(DRIVER_DIR)/*.c)
 
 # the ’.c’ extension of filenames in C_SOURCES with ’.o’
 OBJ_FILES=$(patsubst src/%.c, $(BUILD_DIR)/%.o, $(C_SOURCES))

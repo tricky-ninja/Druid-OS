@@ -1,4 +1,4 @@
-#include "system.h"
+#include "memory.h"
 #include "stdio.h"
 #include "log.h"
 
@@ -6,7 +6,6 @@
 
 void _kernel_panic(char *err)
 {
-    VGA_init();
     VGA_clear(0x41);
     printf("\n\n\n\n\n\n\n\n\n\n\t\t\t\t  KERNEL PANIC!! (O-O)\n\t\t\t\t%s", err);
     Log_critical("Panic", "A kernel panic occured, Reason: %s", err);
@@ -15,7 +14,6 @@ void _kernel_panic(char *err)
 
 void _test()
 {
-    VGA_init();
     printf("Hello from Druid OS\n");
     printf("Druid os version: %s", VERSION);
     printf("\n\nDruid ->");
@@ -28,6 +26,7 @@ void _test()
 }
 
 void _start() {
+    VGA_init();
     _test();
  //   _kernel_panic("Just to test this screen");  // uncomment to test kernel panic screen
     for (;;);

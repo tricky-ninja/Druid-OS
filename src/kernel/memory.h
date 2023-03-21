@@ -1,6 +1,6 @@
 #pragma once
 
-#include "x86.h"
+#include "arch/i686/io.h"
 
 /*
   Copies count bytes of memory from source to destination
@@ -35,11 +35,3 @@ uint8_t *memset(uint8_t *dest, uint8_t val, uint32_t count);
 */
 uint16_t *memsetw(uint16_t *dest, uint16_t val, uint32_t count);
 
-/*
-  Calculates the length of a null terminated string
-  @params:
-    str - a pointer to the string
-  @returns:
-    the length of the string
-*/
-uint32_t strlen(const char *str);

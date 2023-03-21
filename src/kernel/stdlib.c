@@ -55,3 +55,11 @@ void reverse(char *string)
     reverse(string);
   }
 }
+
+uint32_t strlen(const char *str)
+{
+  uint32_t i = 0;
+  while (str[i] != 0)
+    i++;
+  return i;
+}
