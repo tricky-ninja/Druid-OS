@@ -2,7 +2,7 @@
 
 static const char *const g_debug_colorCodes[] = {
     [log_debug] = "\033[2;37m",
-    [log_info] = "\033[36m",
+    [log_info] = "\033[0;35m",
     [log_warning] = "\033[1;93m",
     [log_error] = "\033[1;31m",
     [log_critical] = "\033[1;97;101m",

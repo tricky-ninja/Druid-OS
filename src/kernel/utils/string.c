@@ -1,4 +1,4 @@
-#include "stdlib.h"
+#include "string.h"
 
 char *itoa(int num)
 {

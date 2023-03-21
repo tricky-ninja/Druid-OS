@@ -2,7 +2,7 @@
 
 int putc_internal(bool debug,char ch)
 {
-  if (debug)  i686_write_port_byte(0xE9, ch);
+  if (debug)  i686_write_port_byte(0xE9, ch); // E9 hack, works only in qemu and bochs
   else VGA_print_char(ch, 0);
   return ch;
 }

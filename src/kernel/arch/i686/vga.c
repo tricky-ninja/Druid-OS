@@ -1,4 +1,4 @@
-#include "screen.h"
+#include "vga.h"
 
 void VGA_set_cursor(uint8_t csrX, uint8_t csrY)
 {

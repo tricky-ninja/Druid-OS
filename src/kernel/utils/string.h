@@ -1,8 +1,9 @@
 #pragma once
 #include <stdint.h>
-#include "memory.h"
+#include "../memory.h"
 
-typedef enum bool{
+typedef enum bool
+{
   false = 0,
   true = 1,
 } bool;

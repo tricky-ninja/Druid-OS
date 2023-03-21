@@ -42,9 +42,13 @@ make debug
 - Flat memory model
 - VGA driver
 - Basic Logging system (E9 hack)
-### In development
 - Basic standard library
+### In development
+- Kernel GDT
+- Interupts
 - Keyboard driver
+- Basic shell
+- Dynamic memory allocation
 - Filesystem
 
 
