@@ -27,7 +27,8 @@ create:
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)/kernel
 	mkdir -p $(BUILD_DIR)/drivers
-
+	mkdir -p $(BUILD_DIR)/kernel/arch/i686
+	
 clean:
 	rm -rf $(BUILD_DIR)/*
 
